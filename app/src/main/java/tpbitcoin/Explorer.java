@@ -46,21 +46,8 @@ public class Explorer {
         return response.body();
     }
 
-    // TODO
-    public String getLatestHash(){
-        return "";
-    }
 
-    // TODO
-    public Block getBlockFromHash(NetworkParameters params, String hash){
-        return null;
-    }
-
-
-
-
-
-    /**
+        /**
      * Current reward for mining a block
      * @return current reward for mining a block in BTC
      */
@@ -79,8 +66,13 @@ public class Explorer {
     }
 
 
+    // TODO
+    public String getLatestHash(){
+        return "";
+    }
 
 
+    // TODO 
     /**
      * Return the raw bytes of the block whose hash is given as argument
      * @param hash of a valid block contained in bitcoin mainnet
@@ -89,6 +81,21 @@ public class Explorer {
     public byte[] getRawblockFromHash(String hash){
         return null;
     }
+
+    // TODO
+    /**
+     * Create an instance of bitcoinj.core.Block that correspond to the block
+     * whose hash is given.
+     * @param params : NetworkParameters of the blockchain
+     * @param hash : a valid hash of a block 
+     * @return  instance of bitcoinj.core.Block representing the block with given hash 
+     */
+	
+    public Block getBlockFromHash(NetworkParameters params, String hash){
+        return null;
+    }
+
+
 
     /**
      * Convert a block in raw form (array of bytes) to a  bitcoinj Block object
