@@ -1,5 +1,7 @@
 package tpbitcoin;
 
+
+import com.google.gson.*;
 import org.bitcoinj.core.*;
 
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HexFormat;
+
 
 public class Explorer {
     public final  String baseURL;
@@ -68,7 +71,13 @@ public class Explorer {
 
     // TODO
     public String getLatestHash(){
-        return "";
+        String jsonString = request("latestblock");
+        JsonObject jo ;
+        Gson gson = new Gson();
+        jo = gson.fromJson(jsonString, JsonObject.class);
+        //System.out.println("-"+jo.get("block_index"));
+        //System.out.println("hash"+jo.get("hash"));
+        return jo.get("hash").getAsString();
     }
 
 
@@ -79,7 +88,11 @@ public class Explorer {
      * @return byte array encoding the block
      */
     public byte[] getRawblockFromHash(String hash){
-        return null;
+        String resultstring = request("rawblock/" + hash);
+        //System.out.println(resultstring);
+        byte[] result = resultstring.getBytes();
+        //System.out.println(result);
+        return result;
     }
 
     // TODO
@@ -90,9 +103,10 @@ public class Explorer {
      * @param hash : a valid hash of a block 
      * @return  instance of bitcoinj.core.Block representing the block with given hash 
      */
-	
     public Block getBlockFromHash(NetworkParameters params, String hash){
-        return null;
+        byte[] rawblock = getRawblockFromHash(hash);
+        MessageSerializer serializer = new BitcoinSerializer(params,true);
+        return new Block(params, rawblock, serializer, Message.UNKNOWN_LENGTH);
     }
 
 
