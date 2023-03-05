@@ -5,6 +5,7 @@ package tpbitcoin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import org.bitcoinj.core.*;
 import org.bitcoinj.params.UnitTestParams;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class App {
 
 
@@ -28,17 +30,32 @@ public class App {
 
         //Q1  hashrate
         double localHashrate = new HashRateEstimator(5000,5).estimate();
-
+        System.out.println("localHashRate = "+localHashrate);
         // Q2: latest  block  from mainet (bitcoin blockchain) and its predecessor
         Context context   = new Context(new UnitTestParams()); // required  for working with bitcoinj
         Explorer explorer = new Explorer(); // for interacting with blockchain.info API
+
+        System.out.println("Bitcoin Price = "+explorer.getBtcPrice());
+        System.out.println("Bitcoin reward = "+explorer.getBtcReward());
+        String hash1 = explorer.getLatestHash();
+        System.out.println("latest hash = " + hash1);
+
+        //explorer.getRawblockFromHash(hash1);
+
+        Block blk = explorer.fromRawblockToBlock(context.getParams(), explorer.getRawblockFromHash(hash1));
+        System.out.println("nonce = " + blk.getNonce());
+        System.out.println("difficulty = " + blk.getDifficultyTarget());
         // Q3 Some TXs
+        Transaction Tx = blk.getTransactions().get(0);
+        System.out.println(Tx);
 
         // Q4 Mine a new block
         Miner miner = new Miner(context.getParams());
         // empty list of tx since creating txs, even fake ones, requires some work
         ArrayList<Transaction> txs = new ArrayList<>();
+        ECKey pubKey = new ECKey();
         // TODO : mine a new block
+        miner.mine(blk, txs, pubKey.getPubKey());
 
 
         System.out.println("\n");

@@ -50,6 +50,8 @@ public class Miner {
     // TODO
     public Block mine(Block lastBlock, List<Transaction> txs, byte[] pubKey){
 
+        txs.add(generateCoinbase(lastBlock.getParams(),pubKey,50));
+
         return null;
     }
 }

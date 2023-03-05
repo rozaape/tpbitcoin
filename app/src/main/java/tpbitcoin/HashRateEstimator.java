@@ -1,6 +1,7 @@
 package tpbitcoin;
 
 import org.bitcoinj.core.Sha256Hash;
+import org.checkerframework.checker.units.qual.A;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -26,10 +27,28 @@ public class HashRateEstimator {
      * @return : return the hashrate (hash/second)
      */
     public double estimate(){
-        byte[] bytes;
+        byte[] bytes = "aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzzaabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz".getBytes();
         MessageDigest md = Sha256Hash.newDigest();
-        // TODO
-        return 0.0;
+        int i = 0;
+        long start = System.currentTimeMillis();
+        while (true){
+            if (System.currentTimeMillis() - start > duration){
+                break;
+            }
+            else if (i >= numberOfTries){
+                break;
+            }
+            else {
+                md.update(bytes);
+                //System.out.println(md.digest());
+                i = i+1;
+            }
+
+        }
+        long end = System.currentTimeMillis();
+        long temps = end-start;
+        double hashrate = 1000*numberOfTries/temps;
+        return hashrate;
     }
 
 }
